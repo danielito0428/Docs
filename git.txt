@@ -1,0 +1,18 @@
+Create new repo on the cmd 
+
+echo "# Docs" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/danielito0428/Docs.git
+git push -u origin main
+
+
+
+push an existing repository from the command line
+git remote add origin https://github.com/danielito0428/Docs.git
+git branch -M main
+git push -u origin main
+
+
