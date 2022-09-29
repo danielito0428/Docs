@@ -1,0 +1,281 @@
+
+************************** Regex *************************************
+
+[abc]:
+-Matches either an a, b or c character
+[^abc]:
+-Matches any character except for an a, b or c
+[a-z]:
+-Matches any characters between a and z, including a and z.
+[^a-z]:
+-Matches any characters except those in the range a-z.
+
+%.*[0-3]-.*:
+-para encontrar errores de grado 0 al 3 cisco
+%.*-[0-7]-.*:
+
+
+---------------------- Nano------------------------
+
+Update yum database
+	sudo dnf makecache --refresh
+	
+	
+install nano using dnf 
+	sudo dnf -y install nano 
+	
+	
+	
+---------------------------CHAPTER 14 Network Configuration-----------------
+Key terms 
+	Host is a device that communicates via a network with another device.
+	Network is a collection of two or more hosts that are able to communicate with each other. 
+	Internet  consists of a publicly accessible network that connects millions of hosts.
+	Wi-FI Wireless networks.
+	Server A host that provides services to another host.
+	Service feature provided by a host.
+	Client a host that is accessing a server.
+	Router also called a gateway isa machine that connects hosts from one netwrok to another.
+	
+	Packet is used to send network communication between hosts. By breaking down communication into smaller chunks.
+	IP Address is a unique number assigned to a host on a network.
+	Mask (subnet mask) is a number system that can be used to define which IP addresses are considreed to be within a single network.
+	Hostname names are more natural for humans to remember than numbers. Hostnames are translated into iP addresses.
+	URL is used to locate a resource on the internet.
+	DHCP defines how network information is assigned to client hosts.
+	DNS provides the service of translating domain names into IP addresses.
+	Ehternet cables are connetced to a network cards that supports ethernet connections. This cablesa re desgined to support different speds from 10Mbps to 100Gbps.
+	TCP/IP Is a collection of protcols that are used to define how a network communication should take place between hosts.
+	
+	
+IP Address
+
+IPv4 addresses a total of ofur 8 bit numbers are used to define the address. This is considered a 32-bit address using decimal
+192.168.10.120
+
+IPv6 addresses are much larger using a 128-bit addresess using hexadecimal
+2001:0db8:85a3:0042:1000:8a2e:0370:7334
+
+ Two reason why the change from IPv4 to IPv6 has been done 
+	NAT: A group of hosts shares a single IP address 
+	Porting: is switching over from one technology o another 
+
+
+Configuring IPv4
+
+In CentOS the primary IP config file is the /etc/sysconfig/network-scripts/ifcfg-eth0
+When a device is going to be configures by DHCP the BOOTPROTO value would be DHCP and the IPADDR, GATEWAY nad DNS1 values wold not be set.
+
+Configuring IPv6
+In CentOS the primary IP config file is the /etc/sysconfig/network-scripts/ifcfg-eth0
+To use IPv6 you should add the following lines 
+	IPV6INIT=yes	
+	IPV6ADDR=<IPv6 IP Address>
+	IPV6_DEFAULTGW=<IPv6 IP Gateway Address>
+
+You also need to add the following setting to the /etc/sysconfig/network file
+	NETWORKING_IPV6=yes
+	
+
+Domain Name System (DNS)
+
+The address of the DNS is stored in the /etc/resolv.conf file 
+
+
+Network Configuration Files 
+
+/etc/hosts contains the hostnames to IP addresess 
+/etc/resolv.conf contains the IP addresess of the name servers 
+/etc/nsswitch.conf can be used to modify where hostnames look ups occurs. contains a filed which describes in what orderto look up 
+
+Network Tools 
+Useful tools to troubleshoot network issues 
+
+ifconfig displays network configuration but it is being replace with ip addr show 
+inet addr: <ip address> 
+eth0 is th network device
+
+The ip command branches out to do some of the work of several legacy commands such as route and arp 
+
+route command is used to view a table that desribes where network packages are sent. It is bein replacedd with the ip route command
+
+ping command ca be used to determine if another macine is reachable 
+ping will send packets endlessly but with the option -c yo can determine how many pings to send 
+
+netstat command displays a large amount of network info about network connections and the roting table. It is being replaces with ss, netstat -r with ip route and netstat -l is ip-s link
+Important outputs to check are the TX-OK and TX-ERR. A high % of TX-ERR may indicate a problem on the network
+Also commonly to display open ports.
+
+ss command shows socket statsitcis and supports all major packet and socket types 
+netid Socket type and transport protocol 
+state connected or unconnected 
+recv-Q amount of data queued up for being processed having been received 
+send-Q amount of data queued up or being sent to another host 
+Local address address and port of the local hosts's portion 
+Peer address address and port of the remote host's portion 
+
+dig command perform qeris on the NDS server to determine if the info is avvailble
+
+host command associates hostname with IP address using the DNS 
+
+ssh command allows you to connect to another machine across the network
+
+
+------------------------------CHAPTER 15 System and User Security--------------------------------
+
+Creating user allows to give each one permissions which are file and directory permissions given by the system to the users, groups and everyone.
+each user belongs to at least one group to allow user users to more easily share data 
+
+Administrative Accounts 
+logging in as the root user allows you to execute commands as the admin.
+It is not recommended to log in as the root directly becuase you can run a commmand that may disrupt the server 
+
+use the sudo command to execute command without being the root 
+su command to switch between users 
+
+Switching Users 
+su command to switch users 
+	su [options] [username]
+	
+when switching user it is recommended to use login shell as it fully configures the new shell with hte setting of the new user.
+	su-
+	su -large
+	su --login
+	
+
+Executing Privileged Commands 
+
+sudo commands allows user to execute commands as another user 
+
+User Accounts
+
+The /etc/passwd file defines some of the account info for user accounts 
+
+sysadmin:x:1001:1001:System Administrator,,,,:/home/sysadmin:/bin/bash
+name:password:user ID: Group ID: Comment: home directory: shell
+
+The password field is detailed in the /etc/shadow file 
+
+
+Passwords 
+This are saved in the /etc/shadow file 
+
+sysadmin:$6$c75ekQWF$.GpiZpFnIXLzkALjDpZXmjxZcIll14OvL2mFSIfnc1aU2cQ/221QL5AX5RjKXpXPJRQ0uVN35TY3/..c7v0.n0:16874:5:30:7:60:15050::
+username:encypted password: last cahnge: minimum: maximum: warn: inactive: expire: reserved 
+
+	Last change: represents the last time the password was changed the number is in epoch time 
+	minimum: indicates the minimum numbers of days between password changes, a minimum field of 0 means the user can change the password anytime 
+	maximum: indicates the numbers of days the password is valid, this force the user to change the password in a regular basis 
+	warn: indicates the numbers of days before the max numbers of days have passsed. A prompt will appear before the max days have been reached.
+	inactive: When the user ignores the warn their account will go inactive and will have a "grace" period of tie to change the passsword 
+	Expire: represetns the number of days the account will expire 
+	
+	
+	
+SYSTEM ACCOUNTS
+Regular user accounts typically have an UID values greater than 500 on some sytems 1000
+Root user has special acces to the system with an UID 0 
+
+System acounts are assigned with a UID value of 1 to 499 and are designed to provide accounts for services that are running on the system 
+Sytem accounts generraly doesnt have a home directory 
+
+
+GROUP ACCOUNTS
+Each user can be a member of one or more groups which can lso affect the level of access to the system 
+Primary group of a user can be found in /etc/passwd file 
+Secondary groups and groups themselves can be found in /etc/groups file  
+
+mail:x:12:mail,postfix
+group name: passsword: GID: user list 
+
+
+VIWEING USER INFORMATION 
+id command is usd to print user and group info for a specified user 
+uid=1001(sysadmin) gid=1001(sysadmin) groups=1001(sysadmin),4(adm),27(sudo)
+the command lists the user ID and username first, primary group with its GID, and finally secondary group
+
+
+VIEWING CURRENT USERS 
+who command displays a list of users logged in where they are logged in from and when.
+
+sysadmin	   pts/0	2013-10-11 09:59 (:0.0)
+username       terminal date             host
+
+Viewing Login History 
+last command reads the entire login history from the /var/log/wtmp file and displays all logins and reboots
+
+
+
+----------------------CHAPTER 16 Creating Users and Groups-----------------------
+
+On some distro creating a new user account also automatically creates a group account for the user called User Private Group (UPG)
+For the distros that does not do that then new users are typically given the users group as their primary group.
+
+Users can be created with memberships in groups that already exists, or existing users can be modified to have memberships in existing groups
+It is more efficient to create the groups first then users 
+
+
+GROUPS 
+Most common reason to create groups is to provide a way for users to share files.
+You can verfy the changes by viewing the /etc/group file with a grep command 
+
+CREATING A GROUP
+groupadd command by the root user to create a new group. You only need the name of the group to be created. With -g option can be use to specify a GID 
+groupadd -g 1006 test
+
+GROUP ID CONSIDERATIONS 
+You should avoid creating GID in the same numeric range where you expect to create UIDs 
+
+GIDs under 500 (redHat) or 1000 (debian) are reerved for system use. 
+to assign a lower GID value you can use the -r option 
+
+GROUP NAMING CONSIDERATIONS 
+	First character of the aname should be either and underscore or a lowercase
+	Up to 32 characters but the recommendation is to use less than 16
+	The last character should not be a hyphen (-) 
+	
+	
+MODIFYING A GROUP
+groupmod command can be used to either change the nae of a group with the -n option or change the GID with the -g option.
+Changing the gorup's name will not disrupt the access to the files but changing the GID will cause problems.
+
+If you change the GID for a group then all the files with that group will not longer be associated with that group.
+
+use the command find -nogroup to search for all the orphaned files.
+
+
+DELETING A GROUP
+groupdel commmand will delete a group. Only secondary groups can be deleted.
+AS long as a group is not a primary group for any user it can be deleted.
+
+
+USERS
+user info is stored in /etc/passwd and authentication info is stored in /etc/shadow 
+
+Group shows the primary group f the user by default is the 100 use the -g option to specify a different primary group 
+
+Home shows the /home directory of the new user for example if the new user is bob its home directory would be /home/bob 
+to change its home directory use the -b opion 
+
+Inactive value represetns the number of days after the passwd expires that he account is disable.
+A value of -1 means it is not enable.
+Use the -f option to use a different value 
+
+Expire there s no value in this field. usually an expiration date is set on an individual account 
+-e option to modify 
+
+Shell indicates the default shell for a user when they log in.
+Use the -s option o use a different login shell.
+
+Skeleton Direcory 
+Skel value determines which skeleton directory has its contents copied into the new user's home directory
+-k option to use a different SKEL 
+
+Create mail spool is a file where incoming emails is placed
+
+
+
+
+
+
+
