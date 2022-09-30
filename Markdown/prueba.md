@@ -47,7 +47,5 @@ To quickly turn a URl or an email address into a link encolse it in <>.
 
 To add an image add an exclamation point followed by alt text in brackets, ad the path or the url to the image.
 
-![Prueba](https://www.google.com/imgres?imgurl=https%3A%2F%2Fmytanfeet.com%2Fwp-content%2Fuploads%2F2014%2F06%2FPlaya-Penca-Guanacaste.jpg&imgrefurl=https%3A%2F%2Fmytanfeet.com%2Fcosta-rica-beach-information%2Fplaya-penca-in-guanacaste-costa-rica%2F&tbnid=Y7qSSvDClbmViM&vet=12ahUKEwioqdbK0b36AhXprnIEHWEvAj0QMygAegUIARC9AQ..i&docid=NfFDpiKWqLb9dM&w=880&h=587&q=playa%20penca&ved=2ahUKEwioqdbK0b36AhXprnIEHWEvAj0QMygAegUIARC9AQ).
-
-
+![Prueba](img/Playa-Penca-Guanacaste.jpg).
 
