@@ -276,6 +276,171 @@ Create mail spool is a file where incoming emails is placed
 
 
 
+----------------------CHAPTER 17 Ownerships and permissions-----------------------
+
+By default the owner owns the file they create. This ownership can be changed. The OS is associating the UID for the usernme 
+Every file has a group owner. By default the primary group of the user who creates the files is the group owner of any new file. OS is associating the GID of the group.
+
+
+CHANGING GROUPS
+The id command is useful to verify which user account you are in and which groups you have available.
+
+newgrp command to change your current priamry group.
+
+CHANGING GROUPS ONWERSHIPS
+chgrp command  <chgrp group_name file>
+
+As a user without admin prviliges we can only change the group owner of a file to a group that the iser is already a member of.
+
+
+CHANGING USER OWNERSHIPS
+chown allows the root user tochange the user ownership of files and directory.
+A regular user can not use this command to change the user owner of a file, even to give the ownership of one of their own files to another user.
+
+	ej: chown user /path/to/file
+	
+3 methods
+	1. just changing the owner of the file 
+	2. change both user and the group you seperate the user and group by a colon or a preiod. user:group
+	3. if a user doesnt have root priviliges use chown to change nly the group ownership of the file using a colon 
+
+PERMISSIONS
+
+Output for ls -l displays the type of file and the permissions of the file.
+-rw-r--r-- 1 root root 4135 May 27 21:08 /etc/passwd 
+
+- regular file 
+d directory file 
+l symbolic link: refers (points) to another file 
+b block file: relates to a block hardware device where data is read one byte at the time 
+c character file relates to a character hardware device  
+p pipe file 
+s socket file allows 2 processes to communicate, where both processes are allowed to either send or receive data 
+
+PERMISSION GROUPS 
+UGO 
+user group other 
+RWX 
+read write execute 
+
+Read
+On a file this allows procceses to read the content of the file, meaning the content can be viewed and copied.
+On directories, file names can be listed, but other details as permissin are not available 
+
+Write 
+Files can be written by the procceses, so cahnges to the file can be saved. w permission really require r permission to work correctly 
+On a directory file can be added to or removed from a directory 
+
+Execute
+a file can be run or executed as a process 
+On a directory the user can us the cd command sto access the directory and use the directory in a pathname.
+
+Permissions of all parent directories should be considered before consediring the permission on a specific file.
+
+CHANGING PERMISSIONS 
+chmod command is used to change permissions on files and directories. you can use symbolic and numeris sintaxis 
+	chmod new_permissions file_name
+	
+Numeric mthod 
+4 read 
+2 write 
+1 execute 
+
+
+Some combinations to use 
+7 rwx 
+6 rw-
+5 r-x
+4 r--
+3 -wx
+2 -w-
+1 --x
+0 ---
+
+DEFAULT PERMISSIONS 
+the umask command is used to determine default permissions that are set when a file or directory is created.
+These are determined when the umask value is substracted from the max allowable defalt permission
+
+file defualt umask 666
+directory default umask 777
+
+The new umask is only applied during that session when a new shell is stared the default umask is applied.
+To permanently change a user umask you need to modify the .bashrc
+
+
+----------------------CHAPTER 18 Special Direcotries -----------------------
+
+SETUID
+This permission is set on system utilities so they can be run by normal users, but executed with permisssions of root.
+
+it is shown as a lowercase s in the permission where the x for executable permission should be 
+
+To set up the setuid use the symbolic form 
+chmod u+s file 
+
+To set up the setuid numeric form do 
+chmod 4755 file 
+add 4000 to he file's existing permission in this example we assume the file had 775
+
+SETGID
+
+Similar to setuid, but it makes use of the group owner permissions.
+You can setgid on a file and on a directory 
+
+On files it allows a user to run an executable binary file in a manner that proides them additional group access.
+
+On directories it cuases files created in the direcotry to be owned by the group that own the directory automatically.
+To configure setid use the following sintaxis 
+
+Symbolically
+chmod g+s <file|directory>
+
+Numerically add 2000 to the file's existing permission 
+chmod 2775 <file|dir>
+
+
+
+
+STICKY BIT 
+It is used to prevent other users form deleting files that they do not own in a shared directory.
+With the sticky bit files can only be deleted by the owner of the file or the root user
+
+To configure sticky bit use this sintaxis 
+
+Symbolically
+chmod o+t <dir>
+
+Numerically add 1000 to the directory's existing permissions 
+chmod 1775 <file|dir>
+
+
+LINKS 
+
+You can create a file that is linked to the one that is being accesed 
+
+Therer are Hard links and soft links 
+
+Creating hard links 
+Metadata is called the file's inodes  table that includes pointers to the other blocks o the file system called data block where the data is stored.
+Every file on a partition has a unique identification number called inode 
+
+Hard links are two files that point to the same inode
+to create a hard link 
+ln command 
+	ln target link_name 
+	
+hard link and the original file will have the same inode number 
+
+Symbolic Links / Soft links 
+
+It is simply a file that points to another file.
+
+To create a soft link use the ln -s command 
+	ln -s target link_name
+	
+
+
+
 
 
 
